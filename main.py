@@ -7,7 +7,7 @@ from typing import List
 class Users(BaseModel):
     name: str 
     age: int | None = None
-    email: str None = None
+    email: str| None = None
     password: str
     active: bool | None = True
 
