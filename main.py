@@ -1,20 +1,13 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
+from api import users, courses, sections
 
 #trying to make a change
 
-class Users(BaseModel):
-    name: str 
-    age: int | None = None
-    email: str| None = None
-    password: str | None = None
-    active: bool | None = True
 
-users = []
+
 app =  FastAPI(
 title = 'FAST API LMS',
-description = "learning Management System for students",
+description = "Learning Management System for Students",
 version = "0.0.1",
 terms_of_service = "http://example.com/terms/", 
 contact={
@@ -43,19 +36,9 @@ tags_metadata=[
 )
 
 
-
-@app.get("/users", response_model=List[Users])
-def get_users():
-    return users
-
-@app.post("/users")
-def create_user(user: Users) -> dict:
-    users.append(user.dict())
-    return {"User created": user.dict()}
-
-@app.get("/users/{user_id}")
-def get_user(user_id: int):
-    return users[user_id]
+app.include_router(users.router)
+app.include_router(courses.router)
+app.include_router(sections.router)
 
 
 
