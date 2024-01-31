@@ -8,7 +8,7 @@ class Users(BaseModel):
     name: str 
     age: int | None = None
     email: str| None = None
-    password: str
+    password: str | None = None
     active: bool | None = True
 
 users = []
