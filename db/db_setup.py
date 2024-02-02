@@ -4,9 +4,9 @@ from sqlalchemy.orm import sessionmaker
 
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:Princeowen2002@localhost:5432/Fast-api-sever"
+SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:Princeowen2002@localhost/Fast-api-sever"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False},future=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL,future=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -19,7 +19,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
 
 
 
