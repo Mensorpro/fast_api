@@ -1,32 +1,26 @@
 import fastapi
 from pydantic import BaseModel
 from typing import List
+from api.utils.users import get_users, create_user, get_user
+
+from db.db_setup import get_db
+from sqlalchemy.orm import Session
+from fastapi import Depends, HTTPException, status
+from pydantic_schemas.user import UserCreate, User
 
 router = fastapi.APIRouter()
 
 
-class Users(BaseModel):
-    name: str 
-    age: int
-    email: str| None = None
-    password: str 
-    active: bool | None = True
-
-
-users = []
-
-@router.get("/users", response_model=List[Users], tags=["users"])
-def get_users():
+@ router.get("/users", response_model=List[User], tags=["users"])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = get_users(db, skip=skip, limit=limit)
     return users
 
-@router.post("/users", response_model=Users, tags=["users"])
-def create_user(user: Users) -> dict:
-    users.append(user.dict())
-    return {"User created": user.dict()}
 
-@router.get("/users/{user_id}", response_model=Users, tags=["users"])
-def get_user(user_id: int):
-    return users[user_id]
+@ router.post("/users", response_model=User, tags=["users"])
+def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = create_user(db, user)
+    return db_user
 
 
 

@@ -18,11 +18,13 @@ class User(Base):
     username = Column(String(50), nullable=False, unique=True, index=True)
     password = Column(String(50), nullable=False,index=True)
     email = Column(String(50), nullable=False, unique=True, index=True)
-    is_admin = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
     role = Column(Enum(Role), default=Role.user)
 
     profile = relationship('Profile', back_populates='owner', uselist=False)
+    student_courses = relationship('StudentCourse', back_populates='student')
+    completed_content_blocks = relationship('CompletedContentBlock', back_populates='student')
+    courses = relationship('Course', back_populates='created_by')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -33,7 +35,6 @@ class Profile(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship('User', backref='profile')
     first_name = Column(String(50), nullable=False, index=True)
     last_name = Column(String(50), nullable=False, index=True)
     phone = Column(Integer(), nullable=False, index=True)
